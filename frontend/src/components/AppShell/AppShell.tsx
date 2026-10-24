@@ -1,23 +1,47 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar/Topbar";
+import Drawer from "@/src/components/UI/Drawer/Drawer";
 import styles from "@/src/styles/Design.module.css";
 
 const AppShell = ({ children }: { children: ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const closeMenu = () => setMenuOpen(false);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 761px)");
+    const handleResize = () => {
+      if (desktop.matches) setMenuOpen(false);
+    };
+
+    desktop.addEventListener("change", handleResize);
+    return () => desktop.removeEventListener("change", handleResize);
+  }, []);
 
   return (
     <div className={styles.app}>
       <a className={styles.skipLink} href="#main-content">
         К содержимому
       </a>
-      <Sidebar open={menuOpen} />
+      <Sidebar />
+      <Drawer
+        id="mobile-navigation"
+        label="Меню Альфа-Бизнес"
+        open={menuOpen}
+        onClose={closeMenu}
+        closeLabel="Закрыть навигацию"
+      >
+        <Sidebar mobile onNavigate={closeMenu} />
+      </Drawer>
       <main className={styles.main} id="main-content">
-        <Topbar onMenu={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} />
+        <Topbar
+          onMenu={() => setMenuOpen((open) => !open)}
+          menuOpen={menuOpen}
+        />
         <div className={styles.pageContent} key={pathname}>
           {children}
         </div>

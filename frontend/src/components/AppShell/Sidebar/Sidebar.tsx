@@ -24,15 +24,27 @@ const SUB_ITEMS = [
   ["/settings", "Настройки ленты"],
 ];
 
-const Sidebar = ({ open }: { open: boolean }) => {
+interface SidebarProps {
+  mobile?: boolean;
+  onNavigate?: () => void;
+}
+
+const Sidebar = ({ mobile = false, onNavigate }: SidebarProps) => {
   const pathname = usePathname();
   const { events } = useClient();
   const inAnalytics = ANALYTICS_ROUTES.includes(pathname);
 
   return (
     <aside
-      id="main-navigation"
-      className={`${styles.side} ${open ? styles.sideOpen : ""}`}
+      className={`${styles.side} ${mobile ? styles.mobileSide : ""}`}
+      onClick={(event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.closest("a[href]")
+        ) {
+          onNavigate?.();
+        }
+      }}
     >
       <Link className={styles.logo} href="/">
         <i>А</i>Альфа-Бизнес

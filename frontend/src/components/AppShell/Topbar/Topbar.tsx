@@ -27,11 +27,13 @@ const Topbar = ({
   return (
     <header className={styles.top}>
       <button
+        type="button"
         className={styles.menuButton}
         onClick={onMenu}
         aria-label="Открыть навигацию"
         aria-expanded={menuOpen}
-        aria-controls="main-navigation"
+        aria-controls="mobile-navigation"
+        aria-haspopup="dialog"
       >
         <Icon name="menu" />
       </button>
