@@ -39,7 +39,10 @@ class Collector:
         kwargs = {"article":article,"check_access":check_access}
         if check_access and not article and source.listing_scrolls:
             kwargs["scrolls"] = source.listing_scrolls
-        return browser.read(url,**kwargs)
+        page = browser.read(url,**kwargs)
+        if check_access and not article and not discover(page,source,limit=1) and hasattr(browser,"wait_for_listing"):
+            page = browser.wait_for_listing(page,source)
+        return page
 
     def robots(self,browser,store,source,url,cache):
         p = urlsplit(url)

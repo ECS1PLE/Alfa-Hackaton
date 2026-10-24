@@ -30,6 +30,12 @@ def png(width=640,height=360):
 
 
 class ImagesTests(unittest.TestCase):
+    def test_document_base_resolves_images_and_preserves_article_identity(self):
+        tree=html.fromstring('<html><base href="https://news.example/"><article><img src="media/lead.jpg?sig=z%2B2&amp;b=1"></article></html>')
+        result=candidates(tree,SOURCE,'https://news.example/article/1',{})
+        self.assertEqual(result[0]['url'],'https://news.example/media/lead.jpg?sig=z%2B2&b=1')
+        self.assertEqual(result[0]['article_id'],digest('https://news.example/article/1'))
+
     def test_cdn_signature_is_preserved_and_private_schemes_rejected(self):
         self.assertEqual(image_url("https://news.example/story","https://cdn.example/image?z=2&sig=AbC&x=1#photo"),"https://cdn.example/image?z=2&sig=AbC&x=1")
         for value in ("data:image/png;base64,AAA","javascript:alert(1)","http://127.0.0.1/a.jpg","https://user:pass@example.com/a"):

@@ -27,7 +27,7 @@
 | `schema_version` | int, сейчас 1 |
 | `kind` | string, сейчас external_news, в том числе у корпоративных блогов |
 | `source_id`, `source_name` | string, идентификатор адаптера и имя источника |
-| `source_kind` | news_media, company_blog, community или regulator в текущем каталоге; поле конфигурации, не определение моделью |
+| `source_kind` | news_media, company_blog, community, regulator или think_tank в текущем каталоге; поле конфигурации, не определение моделью |
 | `url` | string, адрес из очереди, изначально запрошенный браузером |
 | `canonical_url` | string, принятый канонический URL внутри области источника |
 | `title`, `text` | string, заголовок и основной текст; абзацы нормализуются, HTML удаляется |
@@ -160,6 +160,6 @@ JSONL — UTF-8, один JSON-объект на строку. Экспорт б
 | `--topics finance economy` | достаточно пересечения хотя бы по одной теме |
 | `--full-text-only` | исключает известные accessible_excerpt; полноту остальных не подтверждает |
 
-Автоматический financial-news.jsonl использует возраст 14 дней и темы finance/economy, но не require-date. audit/reextract обновляют общий articles.jsonl и coverage, **не** финансовую подборку; после них при необходимости вызови export явно.
+Автоматический financial-news.jsonl использует темы finance/economy, а finance-politics-news.jsonl — finance/economy/politics. Оба ограничивают возраст 14 днями и не требуют известной даты. audit/reextract обновляют общий articles.jsonl и coverage, **не** тематические подборки; после них при необходимости вызови export явно.
 
 Будущий потребитель эмбеддингов может связывать вектор с парой article_id/content_hash и версией модели/подготовки текста. Сам сборщик векторы, event ID и кластеризацию не создаёт.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
+from copy import deepcopy
 import json
 import re
 from html import unescape
@@ -37,8 +38,20 @@ def normalized_text(value):
     return "\n\n".join(re.sub(r"[ \t\r\n]+", " ", x).strip() for x in re.split(r"\n\s*\n", unescape(value or "")) if x.strip())
 
 
+def article_element_text(node):
+    """Configured containers may include inline advertising code and styles."""
+    clean = deepcopy(node)
+    for unwanted in clean.xpath('.//script | .//style | .//noscript'):
+        unwanted.drop_tree()
+    for block in clean.xpath('.//p | .//blockquote | .//li | .//h2 | .//h3 | .//br'):
+        block.tail = "\n\n"+(block.tail or "")
+    return normalized_text(clean.text_content())
+
+
 def discover(page: Page, source: Source, limit=500):
     tree = html.fromstring(page.html)
+    bases = tree.xpath('//base[@href]/@href')
+    base = urljoin(page.url,bases[0]) if bases else page.url
     urls = []
     seen = set()
     scores = {}
@@ -51,14 +64,17 @@ def discover(page: Page, source: Source, limit=500):
         label = "" if isinstance(link,str) else normalized_text(link.text_content())
         href = link if isinstance(link,str) else link.get("href","")
         try:
-            url = normalize_url(urljoin(page.url,href))
+            url = normalize_url(urljoin(base,href))
         except ValueError:
             continue
         if not source.accepts(url):
             continue
         topics, score = classify(label+" "+url,None,"")
         if source.collection_priority >= 65:
-            score = sum({"finance":12,"economy":12,"business":5,"energy":3}.get(topic,0) for topic in topics)
+            weights = {"finance":12,"economy":12,"business":5,"energy":3}
+            if "politics" in source.topics:
+                weights["politics"] = 12
+            score = sum(weights.get(topic,0) for topic in topics)
         scores[url] = max(scores.get(url,0),score)
         if url not in seen:
             seen.add(url)
@@ -70,11 +86,13 @@ def listing_next(page: Page, source: Source, seed: str):
     """Only explicit next-page controls within the original listing path."""
     from urllib.parse import urlsplit
     tree = html.fromstring(page.html)
+    bases = tree.xpath('//base[@href]/@href')
+    document_base = urljoin(page.url,bases[0]) if bases else page.url
     links = tree.xpath('//a[@rel="next" or @aria-label="Next page" or @aria-label="Следующая страница"]/@href | //link[@rel="next"]/@href')
     base = urlsplit(seed).path.rstrip("/") or "/"
     for link in links:
         try:
-            url = normalize_url(urljoin(page.url, link))
+            url = normalize_url(urljoin(document_base, link))
         except ValueError:
             continue
         path = urlsplit(url).path
@@ -118,6 +136,8 @@ def parse_date(value):
 
 def extract_article(page: Page, source: Source, raw_path: str) -> Article:
     tree = html.fromstring(page.html)
+    bases = tree.xpath('//base[@href]/@href')
+    document_base = urljoin(page.url,bases[0]) if bases else page.url
     documents = list(jsonld_articles(tree))
     ld = next((x for x in documents if x.get("headline")),documents[0] if documents else {})
     def meta(*names):
@@ -127,14 +147,22 @@ def extract_article(page: Page, source: Source, raw_path: str) -> Article:
                 return values[0].strip()
         return None
     h1 = tree.xpath("//h1")
-    title = normalized_text(ld.get("headline") or (h1[0].text_content() if h1 else None) or meta("og:title") or "")
+    configured_title = None
+    for selector in source.title_selectors:
+        values = tree.xpath(selector)
+        configured_title = next((normalized_text(value if isinstance(value,str) else value.text_content()) for value in values
+                                 if normalized_text(value if isinstance(value,str) else value.text_content())),None)
+        if configured_title:
+            break
+    title = normalized_text(configured_title or ld.get("headline") or next((node.text_content() for node in h1 if node.text_content().strip()),None)
+                            or meta("og:title") or next(iter(tree.xpath("//title/text()")),""))
     if not title:
         raise ExtractionError("No article title")
     flags = []
     canonical = page.url
     declared = tree.xpath('//link[@rel="canonical"]/@href')
     if declared:
-        candidate = normalize_url(urljoin(page.url,declared[0]))
+        candidate = normalize_url(urljoin(document_base,declared[0]))
         if source.accepts(candidate):
             canonical = candidate
         elif source.allows_host(candidate):
@@ -149,7 +177,7 @@ def extract_article(page: Page, source: Source, raw_path: str) -> Article:
         dates = tree.xpath("//time[@datetime]/@datetime")
         raw_date = dates[0] if dates else None
     specific_body = any(tree.xpath(selector) for selector in source.body_selectors)
-    if not documents and not raw_date and not tree.xpath("//article") and meta("og:type") != "article" and not specific_body:
+    if not documents and not raw_date and not tree.xpath("//article[.//h1 or @itemprop='articleBody']") and meta("og:type") != "article" and not specific_body:
         raise ExtractionError("No article evidence: no article schema, date, article element or og:type")
     published,date_status = parse_date(raw_date)
     modified,_ = parse_date(ld.get("dateModified") or meta("article:modified_time","dateModified"))
@@ -163,13 +191,13 @@ def extract_article(page: Page, source: Source, raw_path: str) -> Article:
         # Configured XPath selectors avoid an extra CSS parser dependency.
         nodes = tree.xpath(selector)
         if nodes:
-            paragraphs = [normalized_text(n.text_content()) for n in nodes if not isinstance(n,str)]
+            paragraphs = [article_element_text(n) for n in nodes if not isinstance(n,str)]
             candidate = "\n\n".join(p for p in paragraphs if p)
             if len(candidate) >= source.min_text_chars:
                 body,method = candidate,"source_xpath"
                 break
     if not body and not paywall and isinstance(ld.get("articleBody"),str):
-        body = normalized_text(html.fromstring("<div>"+ld["articleBody"]+"</div>").text_content())
+        body = article_element_text(html.fromstring("<div>"+ld["articleBody"]+"</div>"))
         method = "jsonld_article_body"
     if not body:
         body = trafilatura.extract(page.html,url=page.url,include_comments=False,include_tables=True,

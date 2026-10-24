@@ -56,6 +56,12 @@ def main(argv=None):
     cmd.add_argument("--sources",nargs="*",default=[])
     cmd.add_argument("--workers",type=int,choices=range(1,5),default=2)
     cmd.add_argument("--limit",type=int,default=0,help="Maximum articles needing downloads; 0 means all")
+    cmd = sub.add_parser("check-sources",help="Check current article samples, without archive crawling or image downloads")
+    cmd.add_argument("--sources",nargs="*",default=[])
+    cmd.add_argument("--workers",type=int,choices=range(1,5),default=2)
+    cmd.add_argument("--max-articles",type=int,default=2,help="Required distinct canonical sample articles per source (1–5)")
+    cmd.add_argument("--max-links",type=int,default=80)
+    cmd.add_argument("--resume",action="store_true")
     cmd = sub.add_parser("export")
     cmd.add_argument("--output",type=Path)
     cmd.add_argument("--max-age-days",type=int)
@@ -81,6 +87,20 @@ def main(argv=None):
                 report = diagnose(args.runtime,args.headless,args.chrome_binary,args.chromedriver)
             print(json.dumps(report,ensure_ascii=False,indent=2))
             return 0 if report["ok"] else 1
+        if args.command == "check-sources":
+            from .source_check import check_sources
+            if not 1<=args.max_articles<=5 or args.max_links<1:
+                raise ValueError("Source check requires 1–5 sample articles and positive max-links")
+            ids = args.sources or [source["id"] for source in json.loads(args.config.read_text())["sources"]]
+            sources = load_sources(args.config,ids)
+            stop = threading.Event()
+            signal.signal(signal.SIGINT,lambda *_:stop.set())
+            signal.signal(signal.SIGTERM,lambda *_:stop.set())
+            collector = Collector(args.runtime,args.headless,args.chrome_binary,args.chromedriver,stop)
+            with runtime_lock(args.runtime):
+                report = check_sources(collector,sources,args.workers,args.max_articles,args.max_links,args.resume)
+            print(json.dumps({key:value for key,value in report.items() if key!="sources"},ensure_ascii=False,indent=2))
+            return 0 if all(row["status"]=="passed" and len(row["samples"])>=args.max_articles for row in report["sources"] if row["source_id"] in ids) else 1
         if args.command == "images":
             from .media_backfill import backfill
             if args.limit<0:
@@ -96,6 +116,7 @@ def main(argv=None):
                 try:
                     snapshot.export(args.runtime/"articles.jsonl")
                     snapshot.export(args.runtime/"financial-news.jsonl",max_age_days=14,topics=("finance","economy"))
+                    snapshot.export(args.runtime/"finance-politics-news.jsonl",max_age_days=14,topics=("finance","economy","politics"))
                     write_report(snapshot,args.config,args.runtime/"coverage.md")
                 finally:
                     snapshot.close()
@@ -122,6 +143,7 @@ def main(argv=None):
                     try:
                         snapshot.export(args.runtime/"articles.jsonl")
                         snapshot.export(args.runtime/"financial-news.jsonl",max_age_days=14,topics=("finance","economy"))
+                        snapshot.export(args.runtime/"finance-politics-news.jsonl",max_age_days=14,topics=("finance","economy","politics"))
                         write_report(snapshot,args.config,args.runtime/"coverage.md")
                     finally:
                         snapshot.close()

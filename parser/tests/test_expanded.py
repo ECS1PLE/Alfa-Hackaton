@@ -21,23 +21,33 @@ class ExpandedTests(unittest.TestCase):
     def test_complete_catalog_loads_and_domains_have_one_owner(self):
         # Includes disabled adapters; they must remain runnable explicitly.
         path = Path("config/sources.json")
-        ids = [s["id"] for s in json.loads(path.read_text())["sources"]]
-        self.assertGreaterEqual(len(load_sources(path,ids)),40)
+        rows = json.loads(path.read_text())["sources"]
+        candidates = Path("config/source-candidates.json")
+        if candidates.exists():
+            rows += json.loads(candidates.read_text())["sources"]
+        with tempfile.TemporaryDirectory() as directory:
+            combined=Path(directory)/"sources.json"
+            combined.write_text(json.dumps({"sources":rows}))
+            self.assertGreaterEqual(len(load_sources(combined,[s["id"] for s in rows])),40)
 
     def test_financial_sources_run_first_and_technology_has_smaller_budget(self):
         sources = load_sources(Path("config/sources.json"))
         self.assertEqual(sources[0].collection_priority,100)
+        candidate_path=Path("config/source-candidates.json")
+        if candidate_path.exists():
+            candidate_ids=[s["id"] for s in json.loads(candidate_path.read_text())["sources"]]
+            sources += load_sources(candidate_path,candidate_ids)
         by = {s.id:s for s in sources}
         self.assertGreater(by["interfax"].max_articles_per_cycle,by["techcrunch"].max_articles_per_cycle)
         self.assertGreater(by["rbc"].collection_priority,by["anthropic"].collection_priority)
         self.assertGreater(by["rbc"].collection_priority,by["cnbc"].collection_priority)
         self.assertGreater(by["rbc"].max_articles_per_cycle,by["cnbc"].max_articles_per_cycle)
 
-    def test_rbc_does_not_enqueue_sport_or_politics(self):
+    def test_rbc_includes_requested_politics_but_excludes_sport(self):
         source = load_sources(Path("config/sources.json"),["rbc"])[0]
         slug = "/24/10/2026/"+"a"*24
         self.assertFalse(source.accepts("https://www.rbc.ru/sport"+slug))
-        self.assertFalse(source.accepts("https://www.rbc.ru/politics"+slug))
+        self.assertTrue(source.accepts("https://www.rbc.ru/politics"+slug))
         self.assertTrue(source.accepts("https://www.rbc.ru/business"+slug))
 
     def test_financial_headlines_outrank_generic_sidebar_news_before_limit(self):
@@ -53,6 +63,20 @@ class ExpandedTests(unittest.TestCase):
             self.assertGreater(score,0)
         self.assertEqual(classify("Победа фигуристки",None,"Медаль чемпионата"),([],0))
 
+    def test_political_source_ranks_its_topic_before_unrelated_links(self):
+        source = replace(SOURCE,collection_priority=95,topics=["politics"])
+        p = page()
+        p.html = '<a href="/article/1">Рецепт пирога</a><a href="/article/2">Парламент обсуждает законопроект</a>'
+        self.assertEqual(discover(p,source,limit=1),["https://news.example/article/2"])
+        for headline in ("Президент объявил выборы", "Parliament election results", "政府外交", "Bundestag Regierung"):
+            self.assertIn("politics",classify(headline,None,"")[0])
+
+    def test_european_financial_topic_hints(self):
+        for headline in ("Banque et marchés", "Aktien und Börse", "Banca e credito", "Mercados e inversión", "Giełda i kredyty"):
+            self.assertIn("finance",classify(headline,None,"")[0])
+        for headline in ("Économie française", "Wirtschaft und Konjunktur", "Gospodarka i inflacja"):
+            self.assertIn("economy",classify(headline,None,"")[0])
+
     def test_only_explicit_pagination_inside_listing(self):
         source = replace(SOURCE,seeds=["https://news.example/economy"])
         p = Page(source.seeds[0],source.seeds[0],"",'<a rel="next" href="/economy?page=2">Next</a>',"",200)
@@ -60,6 +84,13 @@ class ExpandedTests(unittest.TestCase):
         for href in ("https://evil.example/economy?page=2","/sports?page=2","/article/2"):
             p.html = f'<a rel="next" href="{href}">Next</a>'
             self.assertIsNone(listing_next(p,source,source.seeds[0]))
+
+    def test_discovery_respects_document_base_without_accepting_foreign_hosts(self):
+        p=Page('https://news.example/news/','https://news.example/news/','',
+               '<base href="https://news.example/"><a href="article/2">Парламент</a>',"",200)
+        self.assertEqual(discover(p,SOURCE),['https://news.example/article/2'])
+        p.html=p.html.replace('https://news.example/','https://foreign.example/')
+        self.assertEqual(discover(p,SOURCE),[])
 
     def test_query_id_required_for_query_based_article_routes(self):
         source = replace(SOURCE,article_pattern=r"^/press/event/$",article_query_pattern=r"(?:^|&)id=\d+(?:&|$)")
@@ -78,6 +109,39 @@ class ExpandedTests(unittest.TestCase):
         from news_collector.extract import ExtractionError
         with self.assertRaises(ExtractionError):
             extract_article(p,SOURCE,"raw/x")
+
+    def test_document_title_fallback_still_requires_article_evidence(self):
+        from news_collector.extract import ExtractionError
+        source = replace(SOURCE,body_selectors=['//div[@class="story-text"]'])
+        p = page()
+        p.html = '<html><head><title>Полимерный кластер</title></head><body><div class="story-text">'+('Компании инвестируют в промышленный кластер. '*20)+'</div></body></html>'
+        article = extract_article(p,source,"raw/x")
+        self.assertEqual(article.title,"Полимерный кластер")
+        self.assertIn("промышленный кластер",article.text)
+        with self.assertRaises(ExtractionError):
+            extract_article(p,replace(source,body_selectors=[]),"raw/x")
+
+    def test_source_title_selector_excludes_sidebar_heading(self):
+        p=page()
+        p.html=p.html.replace('<body>','<body><h1>Аналитика и комментарии</h1>')
+        p.html=p.html.replace('<h1>Новый завод</h1>','<h1 class="aTitle">Инвестиции компании</h1>')
+        source=replace(SOURCE,title_selectors=['//h1[@class="aTitle"]'])
+        self.assertEqual(extract_article(p,source,'raw/x').title,'Инвестиции компании')
+
+    def test_teaser_article_elements_do_not_make_a_section_an_article(self):
+        from news_collector.extract import ExtractionError
+        p=page()
+        p.html='<html><h1>Экономика</h1>'+('<article><h2>Краткий анонс</h2><p>'+('Анонс другой публикации. '*20)+'</p></article>')*3+'</html>'
+        with self.assertRaises(ExtractionError):
+            extract_article(p,replace(SOURCE,body_selectors=[]),'raw/x')
+
+    def test_configured_body_excludes_inline_ads_code_and_preserves_paragraphs(self):
+        p=page()
+        p.html='<article><h1>Инвестиции</h1><div id="story"><p>'+('Компания строит завод. '*10)+'</p><script>window.advertisingSecret="not article text";</script><style>.advert { color: red }</style><p>Вторая часть новости.</p></div></article>'
+        article=extract_article(p,replace(SOURCE,body_selectors=['//*[@id="story"]']),'raw/x')
+        self.assertNotIn('advertisingSecret',article.text)
+        self.assertNotIn('color: red',article.text)
+        self.assertIn('\n\nВторая часть новости.',article.text)
 
     def test_subscription_advert_is_not_a_paid_article_excerpt(self):
         from news_collector.extract import ExtractionError

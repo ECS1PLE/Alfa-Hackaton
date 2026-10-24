@@ -137,7 +137,8 @@ class Browser:
             if article and self.driver.current_url != url:
                 # Follow an actual visible listing link when available. Chrome
                 # supplies normal navigation/referrer headers; do not forge them.
-                anchor = self.driver.execute_script("""
+                try:
+                    anchor = self.driver.execute_script("""
                   const clean=s=>{const u=new URL(s);u.hash='';
                     for(const k of [...u.searchParams.keys()])
                       if(k.startsWith('utm_')||['gclid','fbclid','yclid'].includes(k))u.searchParams.delete(k);
@@ -147,7 +148,11 @@ class Browser:
                     a.target!=='_blank' && a.getClientRects().length &&
                     ['http:','https:'].includes(new URL(a.href).protocol) && clean(a.href)===target
                     )}catch{return false}})||null;
-                """,url)
+                    """,url)
+                except WebDriverException:
+                    # Some publishers replace URL/searchParams with incomplete
+                    # polyfills. Direct browser navigation remains available.
+                    anchor = None
                 if anchor:
                     previous = self.driver.current_url
                     try:
@@ -190,6 +195,10 @@ class Browser:
                     status = int(response["status"])
         page = Page(url,self.driver.current_url,self.driver.title,self.driver.page_source,
                     self.driver.execute_script("return document.body.innerText"),status)
+        return self.validate_page(page,check_access)
+
+    @staticmethod
+    def validate_page(page, check_access=True):
         title = page.title.casefold()
         start = page.text[:1500].casefold()
         if page.url.startswith(("chrome-error:","chrome://","about:")) or "chrome-error://" in page.html:
@@ -252,6 +261,17 @@ class Browser:
         finally:
             if stream:
                 self.driver.execute_cdp_cmd("IO.close",{"handle":stream})
+
+    def wait_for_listing(self, page, source, timeout=8):
+        """Headers may render before the actual JS news feed."""
+        try:
+            WebDriverWait(self.driver,timeout,poll_frequency=.5).until(lambda driver:any(
+                source.accepts(url) for url in driver.execute_script("return [...document.querySelectorAll('a[href]')].map(a=>a.href)")))
+        except TimeoutException:
+            pass
+        updated = Page(page.requested_url,self.driver.current_url,self.driver.title,self.driver.page_source,
+                       self.driver.execute_script("return document.body.innerText"),page.status)
+        return self.validate_page(updated)
 
     def diagnostic(self, directory: Path, name: str):
         directory.mkdir(parents=True,exist_ok=True)

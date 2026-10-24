@@ -70,6 +70,7 @@ class Source:
     collection_priority: int = 50
     max_articles_per_cycle: int = 20
     listing_link_selectors: list[str] = field(default_factory=list)
+    title_selectors: list[str] = field(default_factory=list)
 
     def accepts(self, url: str) -> bool:
         p = urlsplit(url)

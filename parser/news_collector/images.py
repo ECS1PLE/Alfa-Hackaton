@@ -39,8 +39,10 @@ def image_url(base, value):
 def candidates(tree, source, canonical, ld):
     result, seen = [], set()
     article_id = digest(canonical)
+    bases = tree.xpath('//base[@href]/@href')
+    base = urljoin(canonical,bases[0]) if bases else canonical
     def add(value, role, origin, alt="", caption=""):
-        url = image_url(canonical,value)
+        url = image_url(base,value)
         if not url or url in seen or len(result)>=30:
             return
         seen.add(url)
@@ -88,7 +90,7 @@ def candidates(tree, source, canonical, ld):
                 continue
             links = node.xpath("ancestor::a[1]/@href")
             if links:
-                target = image_url(canonical,links[0])
+                target = image_url(base,links[0])
                 if target:
                     path = urlsplit(target).path.lower()
                     if not path.endswith((".jpg",".jpeg",".png",".webp",".avif",".gif")) and normalize_url(target)!=normalize_url(canonical):
