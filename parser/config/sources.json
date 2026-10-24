@@ -1,0 +1,1682 @@
+{
+  "sources": [
+    {
+      "id": "interfax",
+      "name": "Интерфакс",
+      "seeds": [
+        "https://www.interfax.ru/business/"
+      ],
+      "domains": [
+        "www.interfax.ru",
+        "interfax.ru"
+      ],
+      "article_pattern": "^/(business|world|russia|digital)/[0-9]+$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//article//div[contains(@itemprop,'articleBody')]//p",
+        "//article//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "rbc",
+      "name": "РБК",
+      "seeds": [
+        "https://www.rbc.ru/quote",
+        "https://www.rbc.ru/finances/",
+        "https://www.rbc.ru/economics/",
+        "https://www.rbc.ru/business/"
+      ],
+      "domains": [
+        "www.rbc.ru",
+        "rbc.ru"
+      ],
+      "article_pattern": "^/(?:quote/news/article/[a-f0-9]{24}|(?:business|economics|finances|technology_and_media|industry|money)/[0-9]{2}/[0-9]{2}/[0-9]{4}/[a-f0-9]{24})",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(concat(' ',normalize-space(@class),' '),' article__text ')]//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "tass",
+      "name": "ТАСС",
+      "seeds": [
+        "https://tass.ru/ekonomika"
+      ],
+      "domains": [
+        "tass.ru",
+        "www.tass.ru"
+      ],
+      "article_pattern": "^/(ekonomika|mezhdunarodnaya-panorama|politika)/[0-9]+$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//*[@itemprop='articleBody']//p"
+      ],
+      "enabled": false,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 80,
+      "max_articles_per_cycle": 8
+    },
+    {
+      "id": "guardian",
+      "name": "The Guardian",
+      "seeds": [
+        "https://www.theguardian.com/business"
+      ],
+      "domains": [
+        "www.theguardian.com",
+        "theguardian.com"
+      ],
+      "article_pattern": "^/(business|world|technology|environment)/[0-9]{4}/[a-z]{3}/[0-9]{1,2}/[^/]+$",
+      "language": "en",
+      "publisher_country": "GB",
+      "body_selectors": [
+        "//*[@id='maincontent']//div[contains(@class,'article-body')]//p",
+        "//article//div[@data-gu-name='body']//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "business",
+        "economy",
+        "technology",
+        "ai"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "cbr",
+      "name": "Банк России",
+      "seeds": [
+        "https://www.cbr.ru/"
+      ],
+      "domains": [
+        "www.cbr.ru",
+        "cbr.ru"
+      ],
+      "article_pattern": "^/press/(event|pr)/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(@class,'landing-text')]//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "article_query_pattern": "(?:^|&)id=\\d+(?:&|$)",
+      "source_kind": "regulator",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "vedomosti",
+      "name": "Ведомости",
+      "seeds": [
+        "https://www.vedomosti.ru/business",
+        "https://www.vedomosti.ru/economics"
+      ],
+      "domains": [
+        "www.vedomosti.ru",
+        "vedomosti.ru"
+      ],
+      "article_pattern": "^/(business|economics|finance|technology|investments|management|realty|auto|industry)/(?:(?:news|articles)/)[0-9]{4}/[0-9]{2}/[0-9]{2}/",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//*[@itemprop='articleBody']//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "bbc",
+      "name": "BBC",
+      "seeds": [
+        "https://www.bbc.com/business"
+      ],
+      "domains": [
+        "www.bbc.com",
+        "bbc.com"
+      ],
+      "article_pattern": "^/news/(articles/[a-z0-9]+|[^/]+-[0-9]+)$",
+      "language": "en",
+      "publisher_country": "GB",
+      "body_selectors": [
+        "//*[@data-component='text-block']//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "dw",
+      "name": "Deutsche Welle",
+      "seeds": [
+        "https://www.dw.com/en/business/s-1431"
+      ],
+      "domains": [
+        "www.dw.com",
+        "dw.com"
+      ],
+      "article_pattern": "^/en/.+/a-[0-9]+$",
+      "language": "en",
+      "publisher_country": "DE",
+      "body_selectors": [
+        "//*[@id='main-content']//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "scmp",
+      "name": "South China Morning Post",
+      "seeds": [
+        "https://www.scmp.com/business"
+      ],
+      "domains": [
+        "www.scmp.com",
+        "scmp.com"
+      ],
+      "article_pattern": "/article/[0-9]+/",
+      "language": "en",
+      "publisher_country": "HK",
+      "body_selectors": [
+        "//*[@itemprop='articleBody']//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "xinhua",
+      "name": "Xinhua English",
+      "seeds": [
+        "https://english.news.cn/business/index.htm"
+      ],
+      "domains": [
+        "english.news.cn"
+      ],
+      "article_pattern": "/[0-9]{8}/[a-zA-Z0-9]+/c\\.html$",
+      "language": "en",
+      "publisher_country": "CN",
+      "body_selectors": [
+        "//*[@id='detail']//p",
+        "//div[contains(@class,'main-aticle')]//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "ap",
+      "name": "Associated Press",
+      "seeds": [
+        "https://apnews.com/hub/business"
+      ],
+      "domains": [
+        "apnews.com",
+        "www.apnews.com"
+      ],
+      "article_pattern": "^/article/[^/]+$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [
+        "//div[contains(@class,\"RichTextStoryBody\")]//p"
+      ],
+      "enabled": false,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "cnbc",
+      "name": "CNBC",
+      "seeds": [
+        "https://www.cnbc.com/finance/",
+        "https://www.cnbc.com/markets/",
+        "https://www.cnbc.com/economy/"
+      ],
+      "domains": [
+        "www.cnbc.com",
+        "cnbc.com"
+      ],
+      "article_pattern": "^/[0-9]{4}/[0-9]{2}/[0-9]{2}/[^/]+\\.html$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [
+        "//div[contains(@class,\"ArticleBody\")]//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "chinadaily",
+      "name": "China Daily",
+      "seeds": [
+        "https://www.chinadaily.com.cn/business"
+      ],
+      "domains": [
+        "www.chinadaily.com.cn",
+        "chinadaily.com.cn"
+      ],
+      "article_pattern": "^/a/[0-9]{6}/[0-9]{2}/WS[a-zA-Z0-9]+\\.html$",
+      "language": "en",
+      "publisher_country": "CN",
+      "body_selectors": [
+        "//*[@id=\"Content\"]//p",
+        "//*[@id=\"content\"]//p"
+      ],
+      "enabled": true,
+      "topics": [
+        "business",
+        "economy",
+        "finance"
+      ],
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "kommersant",
+      "name": "Коммерсантъ",
+      "seeds": [
+        "https://www.kommersant.ru/rubric/4",
+        "https://www.kommersant.ru/rubric/3",
+        "https://www.kommersant.ru/rubric/40"
+      ],
+      "domains": [
+        "www.kommersant.ru",
+        "kommersant.ru"
+      ],
+      "article_pattern": "^/doc/\\d+",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(@class,\"article_text_wrapper\")]//p",
+        "//p[contains(@class,\"doc__text\")]"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 80,
+      "max_articles_per_cycle": 8
+    },
+    {
+      "id": "forbes_ru",
+      "name": "Forbes Россия",
+      "seeds": [
+        "https://www.forbes.ru/biznes",
+        "https://www.forbes.ru/finansy",
+        "https://www.forbes.ru/tekhnologii"
+      ],
+      "domains": [
+        "www.forbes.ru",
+        "forbes.ru"
+      ],
+      "article_pattern": "^/(biznes|finansy|tekhnologii|investicii|svoi-biznes|milliardery)/\\d+-",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "rb",
+      "name": "Russian Business",
+      "seeds": [
+        "https://rb.ru/news/"
+      ],
+      "domains": [
+        "rb.ru"
+      ],
+      "article_pattern": "^/(news|story|article)/[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 80,
+      "max_articles_per_cycle": 8
+    },
+    {
+      "id": "vc",
+      "name": "vc.ru",
+      "seeds": [
+        "https://vc.ru/money",
+        "https://vc.ru/ai",
+        "https://vc.ru/invest"
+      ],
+      "domains": [
+        "vc.ru"
+      ],
+      "article_pattern": "^/(?:[a-z0-9_-]+|u/\\d+[^/]*)/\\d+-",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//article//p | //article//li",
+        "//article[contains(@class,\"content__blocks\")]"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "community",
+      "collection_priority": 45,
+      "max_articles_per_cycle": 3
+    },
+    {
+      "id": "cnews",
+      "name": "CNews",
+      "seeds": [
+        "https://www.cnews.ru/",
+        "https://www.cnews.ru/news/"
+      ],
+      "domains": [
+        "www.cnews.ru",
+        "cnews.ru",
+        "ai.cnews.ru"
+      ],
+      "article_pattern": "^/(news/(top|line)/\\d{4}[-/]\\d{2}[-/]\\d{2}|articles/\\d{4})",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 45,
+      "max_articles_per_cycle": 3
+    },
+    {
+      "id": "3dnews",
+      "name": "3DNews",
+      "seeds": [
+        "https://3dnews.ru/ai",
+        "https://3dnews.ru/news"
+      ],
+      "domains": [
+        "3dnews.ru"
+      ],
+      "article_pattern": "^/\\d{6,}(?:/|$)",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 45,
+      "max_articles_per_cycle": 3
+    },
+    {
+      "id": "ixbt",
+      "name": "iXBT",
+      "seeds": [
+        "https://www.ixbt.com/news/"
+      ],
+      "domains": [
+        "www.ixbt.com",
+        "ixbt.com"
+      ],
+      "article_pattern": "^/news/\\d{4}/\\d{2}/\\d{2}/.+\\.html$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 45,
+      "max_articles_per_cycle": 3
+    },
+    {
+      "id": "habr",
+      "name": "Хабр — новости",
+      "seeds": [
+        "https://habr.com/ru/news/"
+      ],
+      "domains": [
+        "habr.com"
+      ],
+      "article_pattern": "^/ru/(?:news|companies/[^/]+/news)/\\d+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(@class,\"article-formatted-body\")]//p"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "community",
+      "collection_priority": 45,
+      "max_articles_per_cycle": 3
+    },
+    {
+      "id": "banki",
+      "name": "Банки.ру",
+      "seeds": [
+        "https://www.banki.ru/news/lenta/"
+      ],
+      "domains": [
+        "www.banki.ru",
+        "banki.ru"
+      ],
+      "article_pattern": "^/news/lenta/\\??",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "article_query_pattern": "(?:^|&)id=\\d+(?:&|$)",
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "finmarket",
+      "name": "Финмаркет",
+      "seeds": [
+        "https://www.finmarket.ru/main/",
+        "https://www.finmarket.ru/news/"
+      ],
+      "domains": [
+        "www.finmarket.ru",
+        "finmarket.ru"
+      ],
+      "article_pattern": "^/(main|news)/\\d+",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "techcrunch",
+      "name": "TechCrunch",
+      "seeds": [
+        "https://techcrunch.com/category/artificial-intelligence/",
+        "https://techcrunch.com/category/startups/"
+      ],
+      "domains": [
+        "techcrunch.com"
+      ],
+      "article_pattern": "^/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [
+        "//div[contains(@class,\"entry-content\")]//p"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "verge",
+      "name": "The Verge",
+      "seeds": [
+        "https://www.theverge.com/ai-artificial-intelligence",
+        "https://www.theverge.com/tech"
+      ],
+      "domains": [
+        "www.theverge.com",
+        "theverge.com"
+      ],
+      "article_pattern": "^/(?:\\d{4}/\\d+/\\d+/\\d+/[^/]+|(?:[a-z-]+/)?\\d+/[^/]+)/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [
+        "//div[contains(@class,\"duet--article--article-body-component\")]//p"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "arstechnica",
+      "name": "Ars Technica",
+      "seeds": [
+        "https://arstechnica.com/ai/",
+        "https://arstechnica.com/information-technology/"
+      ],
+      "domains": [
+        "arstechnica.com"
+      ],
+      "article_pattern": "^/[a-z-]+/\\d{4}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [
+        "//div[contains(@class,\"article-content\")]//p"
+      ],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "venturebeat",
+      "name": "VentureBeat",
+      "seeds": [
+        "https://venturebeat.com/category/ai/",
+        "https://venturebeat.com/category/business/"
+      ],
+      "domains": [
+        "venturebeat.com"
+      ],
+      "article_pattern": "^/(ai|business|data-infrastructure|security|automation)/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "wired",
+      "name": "WIRED",
+      "seeds": [
+        "https://www.wired.com/tag/artificial-intelligence/",
+        "https://www.wired.com/category/business/"
+      ],
+      "domains": [
+        "www.wired.com",
+        "wired.com"
+      ],
+      "article_pattern": "^/story/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "fortune",
+      "name": "Fortune",
+      "seeds": [
+        "https://fortune.com/section/tech/",
+        "https://fortune.com/section/finance/"
+      ],
+      "domains": [
+        "fortune.com"
+      ],
+      "article_pattern": "^/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "reuters",
+      "name": "Reuters",
+      "seeds": [
+        "https://www.reuters.com/business/",
+        "https://www.reuters.com/technology/artificial-intelligence/"
+      ],
+      "domains": [
+        "www.reuters.com",
+        "reuters.com"
+      ],
+      "article_pattern": "^/(business|technology|markets|sustainability)/.+-\\d{4}-\\d{2}-\\d{2}/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "bloomberg",
+      "name": "Bloomberg",
+      "seeds": [
+        "https://www.bloomberg.com/technology",
+        "https://www.bloomberg.com/markets"
+      ],
+      "domains": [
+        "www.bloomberg.com",
+        "bloomberg.com"
+      ],
+      "article_pattern": "^/news/(articles|features)/\\d{4}-\\d{2}-\\d{2}/",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "ft",
+      "name": "Financial Times",
+      "seeds": [
+        "https://www.ft.com/technology",
+        "https://www.ft.com/global-economy"
+      ],
+      "domains": [
+        "www.ft.com",
+        "ft.com"
+      ],
+      "article_pattern": "^/content/[a-f0-9-]+$",
+      "language": "en",
+      "publisher_country": "GB",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "euronews",
+      "name": "Euronews",
+      "seeds": [
+        "https://www.euronews.com/business",
+        "https://www.euronews.com/next"
+      ],
+      "domains": [
+        "www.euronews.com",
+        "euronews.com"
+      ],
+      "article_pattern": "^/(?:next/)?\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "FR",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "tech_eu",
+      "name": "Tech.eu",
+      "seeds": [
+        "https://tech.eu/"
+      ],
+      "domains": [
+        "tech.eu"
+      ],
+      "article_pattern": "^/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "BE",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "sifted",
+      "name": "Sifted",
+      "seeds": [
+        "https://sifted.eu/"
+      ],
+      "domains": [
+        "sifted.eu"
+      ],
+      "article_pattern": "^/articles/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "GB",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "siliconcanals",
+      "name": "Silicon Canals",
+      "seeds": [
+        "https://siliconcanals.com/"
+      ],
+      "domains": [
+        "siliconcanals.com"
+      ],
+      "article_pattern": "^/(?:[a-z-]+/){0,3}[a-z0-9-]{20,}/?$",
+      "language": "en",
+      "publisher_country": "NL",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 65,
+      "max_articles_per_cycle": 4
+    },
+    {
+      "id": "theregister",
+      "name": "The Register",
+      "seeds": [
+        "https://www.theregister.com/"
+      ],
+      "domains": [
+        "www.theregister.com",
+        "theregister.com"
+      ],
+      "article_pattern": "^/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "GB",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "zdnet",
+      "name": "ZDNET",
+      "seeds": [
+        "https://www.zdnet.com/topic/artificial-intelligence/",
+        "https://www.zdnet.com/topic/innovation/"
+      ],
+      "domains": [
+        "www.zdnet.com",
+        "zdnet.com"
+      ],
+      "article_pattern": "^/article/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "business",
+        "technology",
+        "ai"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "cna",
+      "name": "CNA",
+      "seeds": [
+        "https://www.channelnewsasia.com/business"
+      ],
+      "domains": [
+        "www.channelnewsasia.com",
+        "channelnewsasia.com"
+      ],
+      "article_pattern": "^/(business|asia)/[^/]+-\\d+$",
+      "language": "en",
+      "publisher_country": "SG",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "nikkei",
+      "name": "Nikkei Asia",
+      "seeds": [
+        "https://asia.nikkei.com/business/finance",
+        "https://asia.nikkei.com/economy"
+      ],
+      "domains": [
+        "asia.nikkei.com"
+      ],
+      "article_pattern": "^/(business|economy|spotlight)/(?:[^/]+/)*[^/]*(?:-[^/-]+){3,}/?$",
+      "language": "en",
+      "publisher_country": "JP",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "caixin",
+      "name": "Caixin Global",
+      "seeds": [
+        "https://www.caixinglobal.com/finance/",
+        "https://www.caixinglobal.com/"
+      ],
+      "domains": [
+        "www.caixinglobal.com",
+        "caixinglobal.com"
+      ],
+      "article_pattern": "^/\\d{4}-\\d{2}-\\d{2}/.+\\.html$",
+      "language": "en",
+      "publisher_country": "CN",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "yicai",
+      "name": "Yicai Global",
+      "seeds": [
+        "https://www.yicaiglobal.com/"
+      ],
+      "domains": [
+        "www.yicaiglobal.com",
+        "yicaiglobal.com"
+      ],
+      "article_pattern": "^/news/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "CN",
+      "body_selectors": [
+        "//*[@id=\"news-body\"]//p"
+      ],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI News",
+      "seeds": [
+        "https://openai.com/news/"
+      ],
+      "domains": [
+        "openai.com"
+      ],
+      "article_pattern": "^/(?:[a-z]{2}(?:-[A-Z]{2})?/)?index/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "ai",
+        "technology"
+      ],
+      "enabled": false,
+      "max_age_days": 30,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "company_blog",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic News",
+      "seeds": [
+        "https://www.anthropic.com/news"
+      ],
+      "domains": [
+        "www.anthropic.com",
+        "anthropic.com"
+      ],
+      "article_pattern": "^/news/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "ai",
+        "technology"
+      ],
+      "enabled": true,
+      "max_age_days": 30,
+      "listing_scrolls": 1,
+      "listing_pages": 2,
+      "source_kind": "company_blog",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "google_ai",
+      "name": "Google AI Blog",
+      "seeds": [
+        "https://blog.google/technology/ai/"
+      ],
+      "domains": [
+        "blog.google"
+      ],
+      "article_pattern": "^/(?:innovation-and-ai/(?:[^/]+/){2,}[^/]+|technology/ai/[^/]+)/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "ai",
+        "technology"
+      ],
+      "enabled": true,
+      "max_age_days": 30,
+      "listing_pages": 2,
+      "source_kind": "company_blog",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA Blog",
+      "seeds": [
+        "https://blogs.nvidia.com/"
+      ],
+      "domains": [
+        "blogs.nvidia.com"
+      ],
+      "article_pattern": "^/blog/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "ai",
+        "technology"
+      ],
+      "enabled": true,
+      "max_age_days": 30,
+      "listing_pages": 2,
+      "source_kind": "company_blog",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft Blog",
+      "seeds": [
+        "https://blogs.microsoft.com/"
+      ],
+      "domains": [
+        "blogs.microsoft.com"
+      ],
+      "article_pattern": "^/blog/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "ai",
+        "technology"
+      ],
+      "enabled": true,
+      "max_age_days": 30,
+      "listing_pages": 2,
+      "source_kind": "company_blog",
+      "collection_priority": 30,
+      "max_articles_per_cycle": 2
+    },
+    {
+      "id": "frankmedia",
+      "name": "Frank Media",
+      "seeds": [
+        "https://frankmedia.ru/"
+      ],
+      "domains": [
+        "frankmedia.ru"
+      ],
+      "article_pattern": "^/\\d+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "finam",
+      "name": "Финам",
+      "seeds": [
+        "https://www.finam.ru/publications/",
+        "https://www.finam.ru/"
+      ],
+      "domains": [
+        "www.finam.ru",
+        "finam.ru"
+      ],
+      "article_pattern": "^/publications/item/[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "bcs",
+      "name": "БКС Экспресс",
+      "seeds": [
+        "https://bcs-express.ru/category"
+      ],
+      "domains": [
+        "bcs-express.ru"
+      ],
+      "article_pattern": "^/novosti-i-analitika/(?:[a-z0-9-]+/)?[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "investing",
+      "name": "Investing.com",
+      "seeds": [
+        "https://www.investing.com/news/stock-market-news",
+        "https://www.investing.com/news/economic-indicators"
+      ],
+      "domains": [
+        "www.investing.com",
+        "investing.com"
+      ],
+      "article_pattern": "^/news/(?:stock-market-news|economy|economic-indicators|commodities-news|forex-news|cryptocurrency-news|company-news)/.+-\\d+$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "marketwatch",
+      "name": "MarketWatch",
+      "seeds": [
+        "https://www.marketwatch.com/markets",
+        "https://www.marketwatch.com/economy-politics"
+      ],
+      "domains": [
+        "www.marketwatch.com",
+        "marketwatch.com"
+      ],
+      "article_pattern": "^/story/[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "yahoo_finance",
+      "name": "Yahoo Finance",
+      "seeds": [
+        "https://finance.yahoo.com/topic/stock-market-news/",
+        "https://finance.yahoo.com/topic/economic-news/"
+      ],
+      "domains": [
+        "finance.yahoo.com"
+      ],
+      "article_pattern": "^/news/[^/]+\\.html$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "seekingalpha",
+      "name": "Seeking Alpha",
+      "seeds": [
+        "https://seekingalpha.com/market-news"
+      ],
+      "domains": [
+        "seekingalpha.com"
+      ],
+      "article_pattern": "^/news/\\d+-[^/]+/?$",
+      "language": "en",
+      "publisher_country": "US",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "business_standard",
+      "name": "Business Standard",
+      "seeds": [
+        "https://www.business-standard.com/markets/news",
+        "https://www.business-standard.com/finance"
+      ],
+      "domains": [
+        "www.business-standard.com",
+        "business-standard.com"
+      ],
+      "article_pattern": "^/(markets|finance|economy|companies)/.+-\\d+_\\d+\\.html$",
+      "language": "en",
+      "publisher_country": "IN",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "moneycontrol",
+      "name": "Moneycontrol",
+      "seeds": [
+        "https://www.moneycontrol.com/news/business/markets/",
+        "https://www.moneycontrol.com/news/business/economy/"
+      ],
+      "domains": [
+        "www.moneycontrol.com",
+        "moneycontrol.com"
+      ],
+      "article_pattern": "^/news/business/(?:[^/]+/)*[^/]+-\\d+\\.html$",
+      "language": "en",
+      "publisher_country": "IN",
+      "body_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 90,
+      "max_articles_per_cycle": 10
+    },
+    {
+      "id": "prime",
+      "name": "ПРАЙМ",
+      "seeds": [
+        "https://1prime.ru/finance/",
+        "https://1prime.ru/economy/"
+      ],
+      "domains": [
+        "1prime.ru"
+      ],
+      "article_pattern": "^/\\d{8}/[^/]+-\\d+\\.html$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(@class,\"article__text\")]"
+      ],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "ria_economy",
+      "name": "РИА Новости — экономика",
+      "seeds": [
+        "https://ria.ru/economy/"
+      ],
+      "domains": [
+        "ria.ru"
+      ],
+      "article_pattern": "^/\\d{8}/[^/]+-\\d+\\.html$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [
+        "//div[contains(@class,\"article__text\")]"
+      ],
+      "listing_link_selectors": [
+        "//div[contains(@class,\"list-item\")]//a[contains(@class,\"list-item__title\")]/@href"
+      ],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "gazeta_business",
+      "name": "Газета.Ru — бизнес",
+      "seeds": [
+        "https://www.gazeta.ru/business/"
+      ],
+      "domains": [
+        "www.gazeta.ru",
+        "gazeta.ru"
+      ],
+      "article_pattern": "^/business/(?:news/)?\\d{4}/\\d{2}/\\d{2}/\\d+\\.shtml$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "lenta_economics",
+      "name": "Лента.ру — экономика",
+      "seeds": [
+        "https://lenta.ru/rubrics/economics/"
+      ],
+      "domains": [
+        "lenta.ru"
+      ],
+      "article_pattern": "^/(?:news|articles)/\\d{4}/\\d{2}/\\d{2}/[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": false,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "rg_economy",
+      "name": "Российская газета — экономика",
+      "seeds": [
+        "https://rg.ru/tema/ekonomika/"
+      ],
+      "domains": [
+        "rg.ru"
+      ],
+      "article_pattern": "^/\\d{4}/\\d{2}/\\d{2}/[^/]+\\.html$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "expert",
+      "name": "Эксперт",
+      "seeds": [
+        "https://expert.ru/ekonomika/"
+      ],
+      "domains": [
+        "expert.ru"
+      ],
+      "article_pattern": "^/(ekonomika|finansy|promyshlennost|tekhnologii|business)/[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "iz_economy",
+      "name": "Известия — экономика",
+      "seeds": [
+        "https://iz.ru/rubric/ekonomika"
+      ],
+      "domains": [
+        "iz.ru"
+      ],
+      "article_pattern": "^/\\d+/\\d{4}-\\d{2}-\\d{2}/[^/]+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    },
+    {
+      "id": "profile_economy",
+      "name": "Профиль — экономика",
+      "seeds": [
+        "https://profile.ru/economy/"
+      ],
+      "domains": [
+        "profile.ru"
+      ],
+      "article_pattern": "^/(?:economy|news/economy)/(?:[^/]+/)*[^/]+-\\d+/?$",
+      "language": "ru",
+      "publisher_country": "RU",
+      "body_selectors": [],
+      "listing_link_selectors": [],
+      "topics": [
+        "finance",
+        "economy",
+        "business"
+      ],
+      "enabled": true,
+      "listing_pages": 2,
+      "source_kind": "news_media",
+      "collection_priority": 100,
+      "max_articles_per_cycle": 30
+    }
+  ]
+}
